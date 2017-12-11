@@ -1,31 +1,39 @@
 (function () {
   // start with retrieving the elements from the page, and then adding event handling. then write the logic. refer to the seasons example / homework
-   // defined variables 
+   // defined variables
    var cardetails = document.querySelectorAll('.data-ref'),
+        costofcar = document.querySelector('.priceInfo'), //container with price information
+        nameofmodel = document.querySelector('.modelName'),// container with model number
+        carinfo = document.querySelector('.modelDetails');// container with car specifations
    //this is the container that holds all the info
 
-       costofcar = document.querySelector('.priceInfo'), //container with price information
-       nameofmodel = document.querySelector('.modelName'),// container with model number
-       carinfo = document.querySelector('.modelDetails');// container with car specifations
-
-       cardetails.forEach(function(Element,index){
-       	Element.addEventListener('click', details,false);
-       });
-
        function details (){
-       	let run = carData[this.id];
-       	nameofmodel.firstChild.nodeValue = run.modelName;
-       	carinfo.firstChild.nodeValue = run.modelDetails;
-        costofcar.firstChild.nodeValue = run.priceInfo;
+         const url = './includes/functions.php?carModel=' + this.id;
 
-        cardetails.forEach(function(model) {
-        	model.classList.add('nonActive');
-        });
+         fetch(url) //fetch api
+         .then((resp) => resp.json()) //convert to json
+         .then(({ modelName, pricing, modelDetails, model }) => {
+           costofcar.innerHTML = pricing;
+           nameofmodel.textContent = modelName;
+           carinfo.textContent = modelDetails;
 
-        
-           this.classList.remove("nonActive");
+           cardetails.forEach(function(Element,index){
+           	Element.classList.add('nonActive');
+           });
+
+           document.querySelector(`#${model}`).classList.remove('nonActive');;
+         })
+         .catch(function(error){
+           console.log(error);
+         })
+
        }
 
+
+
+       cardetails.forEach(function(Element,index){
+        Element.addEventListener('click', details, false);
+       });
 
 
 
