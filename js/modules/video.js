@@ -21,11 +21,26 @@ var video = {
   },
 
   replayVideo() {
-video.videoPlayer.currentTime = 0;
-video.videoPlayer.play();
+    video.videoPlayer.currentTime = 0;
+    video.videoPlayer.play();
 
-let overlay = document.querySelector('.vid-overlay');
-overlay.classList.remove('show-overlay');
+    let overlay = document.querySelector('.vid-overlay');
+    overlay.classList.remove('show-overlay');
+  },
+
+  fetchVideoThumbs() {
+    const url = './includes/functions.php?getVideos=true';
+
+    fetch() //fetch api call
+      .then((resp) => resp.json()) //convert to json
+      .then((data) => {video.loadVideoThumbs(data); })
+      .catch(function(error) {
+        console.log(error);
+      });
+  },
+
+  loadVideoThumbs(data) {
+    debugger;
   },
 
   init() {
@@ -33,6 +48,8 @@ overlay.classList.remove('show-overlay');
     video.videoPlayer.addEventListener('mouseover', video.volOn, false);
     video.videoPlayer.addEventListener('mouseout', video.volOff, false);
     video.videoPlayer.addEventListener('ended', video.popOverlay, false);
+
+    video.fetchVideoThumbs();
   }
 }
 
